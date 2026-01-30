@@ -1,30 +1,68 @@
 # DevOps Multi-Agent Ecosystem - Sample K8s Deployment
-# Use this to test the k8s-troubleshoot skill
+# Production-ready configuration with security and reliability features
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sample-api
-  namespace: default
+  namespace: devops-multiagents
   labels:
     app: sample-api
+    app.kubernetes.io/name: sample-api
+    app.kubernetes.io/part-of: devops-ecosystem
     managed-by: devops-multiagents
+  annotations:
+    kubernetes.io/description: "Sample API for testing the devops-multiagents ecosystem"
 spec:
   replicas: 2
+  revisionHistoryLimit: 5
+  
+  # Update strategy for zero-downtime deployments
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
   selector:
     matchLabels:
       app: sample-api
+  
   template:
     metadata:
       labels:
         app: sample-api
+        app.kubernetes.io/name: sample-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
     spec:
+      # Security context at pod level
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      
+      # Graceful termination
+      terminationGracePeriodSeconds: 30
+      
       containers:
       - name: api
         image: nginx:alpine
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: http
+          protocol: TCP
+        
+        # Environment from ConfigMap
+        envFrom:
+        - configMapRef:
+            name: sample-api-config
+            optional: true
+        
+        # Resource management
         resources:
           requests:
             memory: "64Mi"
@@ -32,15 +70,58 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
+        
+        # Container security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        
+        # Health checks
         livenessProbe:
           httpGet:
             path: /
             port: http
           initialDelaySeconds: 10
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
         readinessProbe:
           httpGet:
             path: /
             port: http
           initialDelaySeconds: 5
           periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        
+        # Startup probe for slow-starting containers
+        startupProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          failureThreshold: 12
+        
+        # Volume mounts for read-only filesystem
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: nginx-cache
+          mountPath: /var/cache/nginx
+        - name: nginx-run
+          mountPath: /var/run
+      
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: nginx-cache
+        emptyDir: {}
+      - name: nginx-run
+        emptyDir: {}
+

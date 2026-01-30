@@ -1,0 +1,40 @@
+# DevOps Multi-Agent Ecosystem - Namespace
+# Create a dedicated namespace for the application
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-multiagents
+  labels:
+    app.kubernetes.io/name: devops-multiagents
+    app.kubernetes.io/managed-by: kustomize
+---
+# Resource Quota for the namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: devops-multiagents
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    pods: "20"
+    services: "10"
+---
+# Limit Range for individual pods
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: default-limits
+  namespace: devops-multiagents
+spec:
+  limits:
+    - default:
+        cpu: "500m"
+        memory: "256Mi"
+      defaultRequest:
+        cpu: "100m"
+        memory: "64Mi"
+      type: Container

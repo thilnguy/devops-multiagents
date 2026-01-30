@@ -1,0 +1,27 @@
+# Example Terraform Variables
+# Copy this file to terraform.tfvars and update values
+
+# Core Configuration
+aws_region   = "eu-west-1"
+environment  = "dev"  # Options: dev, staging, production
+project_name = "devops-multiagents"
+
+# Network Configuration
+vpc_cidr = "10.0.0.0/16"
+
+# Leave empty for auto-discovery of availability zones
+# availability_zones = ["eu-west-1a", "eu-west-1b"]
+availability_zones = []
+
+# Subnet CIDRs (at least 2 of each required)
+private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24"]
+
+# Optional Features
+enable_flow_logs = false  # Set to true for production
+
+# Additional Tags
+tags = {
+  Team      = "devops"
+  CostCenter = "engineering"
+}

@@ -1,0 +1,23 @@
+# DevOps Multi-Agent Ecosystem - ConfigMap
+# Application configuration management
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-api-config
+  namespace: devops-multiagents
+  labels:
+    app: sample-api
+    managed-by: devops-multiagents
+data:
+  # Application settings
+  APP_NAME: "sample-api"
+  LOG_LEVEL: "info"
+  PORT: "8080"
+  
+  # Feature flags
+  ENABLE_METRICS: "true"
+  ENABLE_HEALTH_CHECK: "true"
+  
+  # External service URLs (non-sensitive)
+  # These would typically be updated per environment
+  API_DOCS_PATH: "/api/docs"

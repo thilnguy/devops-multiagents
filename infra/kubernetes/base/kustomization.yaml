@@ -1,0 +1,33 @@
+# DevOps Multi-Agent Ecosystem - Kustomization
+# Base configuration for Kustomize deployments
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: devops-multiagents-base
+
+# Common labels added to all resources
+commonLabels:
+  app.kubernetes.io/name: devops-multiagents
+  app.kubernetes.io/part-of: devops-ecosystem
+  app.kubernetes.io/managed-by: kustomize
+
+# Resources in deployment order
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+
+# Image customization (override in overlays)
+images:
+  - name: nginx
+    newTag: alpine
+
+# ConfigMap generator (alternative to static configmap.yaml)
+# configMapGenerator:
+#   - name: sample-api-config
+#     namespace: devops-multiagents
+#     literals:
+#       - APP_NAME=sample-api
+#       - LOG_LEVEL=info

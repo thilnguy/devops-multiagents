@@ -1,14 +1,24 @@
 # DevOps Multi-Agent Ecosystem - Sample K8s Service
+# Production-ready service configuration
+
 apiVersion: v1
 kind: Service
 metadata:
   name: sample-api
-  namespace: default
+  namespace: devops-multiagents
   labels:
     app: sample-api
+    app.kubernetes.io/name: sample-api
+    app.kubernetes.io/part-of: devops-ecosystem
     managed-by: devops-multiagents
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    service.kubernetes.io/topology-mode: Auto
 spec:
   type: ClusterIP
+  # Session affinity for stateful connections (optional)
+  sessionAffinity: None
   ports:
   - port: 80
     targetPort: http
@@ -16,3 +26,4 @@ spec:
     name: http
   selector:
     app: sample-api
+
