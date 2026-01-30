@@ -1,8 +1,24 @@
-# SKILL: GitHub Managed Workflow
-**Context:** Sử dụng khi cần tương tác với Repository, Pull Request hoặc Issues.
+---
+name: GitHub Flow
+description: Manage GitHub repositories, PRs, and issues
+---
 
-**Quy trình thực hiện:**
-1. **Kiểm tra:** Gọi tool `get_repository` để xác nhận trạng thái branch hiện tại.
-2. **Thực thi:** - Nếu sửa bug: Dùng `create_issue` để track trước khi code.
-   - Sau khi code xong: Dùng `create_branch` -> `push_files` -> `create_pull_request`.
-3. **Tiêu chuẩn PR:** Nội dung PR phải bao gồm tóm tắt các file đã sửa và @mention các Persona liên quan.
+# Skill: GitHub Managed Workflow
+
+**Context:** Use this when interacting with GitHub repositories, Pull Requests, or Issues.
+
+## Required MCP Server
+- `github` (provides `create_issue`, `create_pull_request`, `push_files`, etc.)
+
+## Workflow
+
+### 1. Check Repository State
+- Use `mcp_github_get_file_contents` to verify current branch state.
+
+### 2. Execute Changes
+- **Bug Fix:** Create an issue first with `mcp_github_create_issue` to track.
+- **After coding:** Use `mcp_github_create_branch` -> `mcp_github_push_files` -> `mcp_github_create_pull_request`.
+
+### 3. PR Standards
+- PR body must include a summary of files changed.
+- @mention relevant Personas for review.

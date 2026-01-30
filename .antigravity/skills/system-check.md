@@ -1,7 +1,35 @@
-# SKILL: System Health Check
-**Mô tả:** Sử dụng để xác minh toàn bộ kết nối MCP và cấu trúc project.
+---
+name: System Check
+description: Verify MCP connections and project structure
+---
 
-**Quy trình:**
-1. Thực thi script: `python3 .antigravity/scripts/mcp_health_check.py`
-2. Nếu bất kỳ bước nào báo ❌, Persona **@Master-Architect** phải yêu cầu người dùng cấu hình lại trước khi tiếp tục.
-3. Nếu tất cả là ✅, hãy liệt kê các MCP Tools khả dụng (ví dụ: `github:create_issue`).
+# Skill: System Health Check
+
+**Context:** Use this to verify all MCP servers and project structures are correctly configured before starting work.
+
+## Required Script
+- `.antigravity/scripts/mcp-health-check.py`
+
+## Workflow
+
+### 1. Execute Health Check
+```bash
+python3 .antigravity/scripts/mcp-health-check.py
+```
+
+### 2. Interpret Results
+- ✅ = Ready to use.
+- ⚠️ = Warning, may need attention.
+- ❌ = Error, must fix before proceeding.
+
+### 3. On Failure
+If any check fails, @Master-Architect should:
+1. Identify the failing component (MCP server, CLI tool, config file).
+2. Request user to fix credentials or install missing tools.
+3. Re-run the health check until all green.
+
+### 4. On Success
+List available MCP tools for each server, e.g.:
+- `github`: `create_issue`, `create_pull_request`, `search_code`
+- `kubernetes`: `pods_list`, `pods_log`, `events_list`
+- `jenkins`: `triggerBuild`, `getBuild`, `getJob`

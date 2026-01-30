@@ -1,8 +1,29 @@
-# SKILL: Live Documentation Fetching
-**Mô tả:** Sử dụng khi cần dữ liệu thực tế ngoài Project hoặc cập nhật syntax mới nhất.
+---
+name: MCP Fetch Docs
+description: Retrieve external documentation using MCP Fetch server
+---
 
-**Quy trình thực hiện:**
-1. **Search:** Nếu chưa có URL, gọi `google-search` để tìm trang tài liệu chính thống.
-2. **Fetch:** Gọi `fetch_url` để lấy nội dung Markdown từ trang đó.
-3. **Analyze:** Trích xuất các đoạn code mẫu (examples) và áp dụng vào Project hiện tại.
-4. **Cite:** Luôn ghi chú nguồn tài liệu đã tham khảo vào phần comment của code.
+# Skill: Live Documentation Fetching
+
+**Context:** Use this when needing up-to-date documentation or examples from external sources.
+
+## Required MCP Server
+- `mcp-fetch` (provides `get_markdown`, `get_markdown_summary`, `get_raw_text`)
+
+## Workflow
+
+### 1. Identify Documentation URL
+- Locate the official documentation page for the technology in question.
+- Example: `https://kubernetes.io/docs/concepts/`
+
+### 2. Fetch Content
+- Use `mcp_mcp-fetch_get_markdown` to retrieve the page as Markdown.
+- For summaries, use `mcp_mcp-fetch_get_markdown_summary`.
+
+### 3. Extract Examples
+- Parse the returned Markdown for code blocks.
+- Apply relevant examples to the current project.
+
+### 4. Cite Sources
+- Always add a comment in the code citing the documentation URL.
+- Example: `# Ref: https://kubernetes.io/docs/...`
