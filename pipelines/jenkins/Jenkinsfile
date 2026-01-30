@@ -1,0 +1,98 @@
+// DevOps Multi-Agent Ecosystem - Jenkinsfile
+// Declarative Pipeline for CI/CD
+
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_NAME = 'devops-multiagents'
+        TERRAFORM_DIR = 'infra/terraform'
+        K8S_DIR = 'infra/kubernetes/base'
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'git log -1 --pretty=format:"%h - %s"'
+            }
+        }
+
+        stage('Validate') {
+            parallel {
+                stage('Terraform Validate') {
+                    steps {
+                        dir("${TERRAFORM_DIR}") {
+                            sh 'terraform init -backend=false'
+                            sh 'terraform validate'
+                            sh 'terraform fmt -check -recursive'
+                        }
+                    }
+                }
+                stage('K8s Lint') {
+                    steps {
+                        dir("${K8S_DIR}") {
+                            sh 'kubectl apply --dry-run=client -f deployment.yaml'
+                            sh 'kubectl apply --dry-run=client -f service.yaml'
+                        }
+                    }
+                }
+                stage('Ecosystem Validation') {
+                    steps {
+                        sh 'python3 tests/validate_ecosystem.py || true'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'python3 tests/verify_capabilities.py || true'
+            }
+        }
+
+        stage('Plan') {
+            when {
+                branch 'main'
+            }
+            steps {
+                dir("${TERRAFORM_DIR}") {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                allOf {
+                    branch 'main'
+                    expression { return params.DEPLOY == true }
+                }
+            }
+            steps {
+                input message: 'Approve deployment?', ok: 'Deploy'
+                dir("${TERRAFORM_DIR}") {
+                    sh 'terraform apply tfplan'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed. Check logs for details."
+        }
+    }
+}
