@@ -1,0 +1,21 @@
+# Buggy Deployment - ImagePullBackOff Test (TC-005)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggy-image-app
+  namespace: devops-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buggy-image
+  template:
+    metadata:
+      labels:
+        app: buggy-image
+    spec:
+      containers:
+      - name: broken
+        image: this-image-does-not-exist:v999  # Intentionally broken
+        ports:
+        - containerPort: 80

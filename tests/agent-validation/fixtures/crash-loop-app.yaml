@@ -1,0 +1,20 @@
+# Crash Loop App - CrashLoopBackOff Test (TC-006)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crash-demo
+  namespace: devops-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crash-demo
+  template:
+    metadata:
+      labels:
+        app: crash-demo
+    spec:
+      containers:
+      - name: crash
+        image: busybox:latest
+        command: ["sh", "-c", "echo Starting; sleep 10; exit 1"]

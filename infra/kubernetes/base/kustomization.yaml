@@ -3,9 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-metadata:
-  name: devops-multiagents-base
-
 # Common labels added to all resources
 commonLabels:
   app.kubernetes.io/name: devops-multiagents
