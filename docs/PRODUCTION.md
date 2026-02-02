@@ -11,6 +11,8 @@ Before deploying to production, ensure you have:
 - [ ] Jenkins instance (or equivalent CI/CD platform)
 - [ ] GitHub repository access
 - [ ] SSL certificates for HTTPS
+- [ ] Agent personas configured (see `docs/personas/`)
+- [ ] Shared memory store initialized (`artifacts/agent-memory.json`)
 
 ## Pre-Deployment Checklist
 

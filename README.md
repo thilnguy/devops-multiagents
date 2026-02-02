@@ -39,6 +39,8 @@ python3 .antigravity/scripts/mcp-health-check.py
 | **Infra Bot** | IaC Specialist | `terraform-plan`, `terraform-sync` |
 | **Kube Master** | K8s Expert | `k8s-troubleshoot` |
 | **Pipe Liner** | CI/CD Automation | `jenkins-ops` |
+| **Watchdog** | Health Monitor | Autonomous checks, Alerting |
+| **Arbitrator** | Conflict Resolution | Priority-based decisions |
 
 ## Directory Structure
 ```

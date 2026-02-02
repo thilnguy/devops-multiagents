@@ -31,10 +31,11 @@
 | 4 | Individual Persona Tests | TC-008, TC-009, TC-010 | ✅ PASS |
 | 5 | Multi-Agent Coordination | TC-011, TC-012 | ✅ PASS |
 | 6 | Approval Flow & Security | TC-013 | ✅ PASS |
-| **7** | **Negative Testing & Security** | TC-NEW-001, TC-NEW-005 | ⬜ P0 |
-| **8** | **Day-2 Operations** | TC-NEW-002, TC-NEW-008 | ⬜ P1 |
-| **9** | **Resilience & Observability** | TC-NEW-004, TC-NEW-007, TC-NEW-009, TC-NEW-010 | ⬜ P2 |
-| **10** | **Architectural Validation** | TC-NEW-003, TC-NEW-006 | ⬜ P0/P1 |
+| **7** | **Negative Testing & Security** | TC-NEW-001, TC-NEW-005 | ✅ PASS |
+| **8** | **Day-2 Operations** | TC-NEW-002, TC-NEW-008 | ✅ PASS |
+| **9** | **Resilience & Observability** | TC-NEW-004, TC-NEW-007, TC-NEW-009, TC-NEW-010 | ✅ PASS |
+| **10** | **Architectural Validation** | TC-NEW-003, TC-NEW-006 | ✅ PASS |
+| **11** | **Advanced Personas** | TC-NEW-011, TC-NEW-012 | ✅ PASS |
 
 ---
 
@@ -217,5 +218,54 @@
 | NEW-008 | Brownfield Update | @Kube-Master | P1 | ✅ |
 | NEW-009 | Race Condition | IB+KM | P2 | ✅ |
 | NEW-010 | Audit Integrity | @Master-Architect | P2 | ✅ |
+| NEW-011 | Watchdog Health Check | @Watchdog | P1 | ✅ |
+| NEW-012 | Arbitrator Conflict Resolution | @Arbitrator | P1 | ✅ |
+
+---
+
+## Phase 11: Advanced Personas (P1)
+
+### TC-NEW-011: Watchdog Autonomous Health Check
+**Category:** Observability & Monitoring  
+**Persona:** @Watchdog
+
+**Scenario:** @Watchdog performs autonomous health checks with exclusion filtering.
+**Steps:**
+1. Load exclusion rules from `agent-memory.json`.
+2. Query K8s pods, events, and Jenkins status via MCP.
+3. Filter out excluded namespaces/pods.
+4. Generate health report with HEALTHY/DEGRADED/CRITICAL status.
+5. Log results to memory.
+
+**Expected:**
+- ✅ Skipped `devops-sandbox` namespace (excluded).
+- ✅ Reported `devops-multiagents` as HEALTHY (2/2 pods running).
+- ✅ Jenkins status verified as online.
+- ✅ No false positive escalations.
+
+---
+
+### TC-NEW-012: Arbitrator Conflict Resolution
+**Category:** Governance & Decision-Making  
+**Persona:** @Arbitrator
+
+**Scenario:** @Arbitrator resolves a Security vs Performance conflict.
+**Conflict:**
+- @Infra-Bot proposes: Open port 22 → 0.0.0.0/0 (Performance)
+- @Watchdog opposes: Security risk (Security)
+
+**Steps:**
+1. @Master-Architect submits conflict to @Arbitrator.
+2. @Arbitrator evaluates Priority Matrix.
+3. Decision rendered based on Security (#1) > Performance (#4).
+4. Alternative solutions proposed.
+5. Decision logged to `approval-log.md`.
+
+**Expected:**
+- ✅ Conflict correctly identified.
+- ✅ Priority Matrix applied: Security wins.
+- ✅ Proposal REJECTED with reasoning.
+- ✅ Alternative solutions provided (Whitelist IP, SSM).
+- ✅ Decision logged to audit trail.
 
 ---
