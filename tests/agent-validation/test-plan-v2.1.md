@@ -207,15 +207,15 @@
 
 | TC | Description | Persona | Priority | Status |
 |----|-------------|---------|:--------:|:------:|
-| NEW-001 | Command Verification | @Master-Architect | P0 | ⬜ |
-| NEW-002 | State Drift | @Infra-Bot | P1 | ⬜ |
-| NEW-003 | Context Handoff | MA+IB+KM | P0 | ⬜ |
-| NEW-004 | Hallucination Check | @Kube-Master | P2 | ⬜ |
-| NEW-005 | Approval Bypass | @Infra-Bot | P0 | ⬜ |
-| NEW-006 | Persona Boundary | All | P1 | ⬜ |
-| NEW-007 | Partial Failure | @Kube-Master | P2 | ⬜ |
-| NEW-008 | Brownfield Update | @Kube-Master | P1 | ⬜ |
-| NEW-009 | Race Condition | IB+KM | P2 | ⬜ |
-| NEW-010 | Audit Integrity | @Master-Architect | P2 | ⬜ |
+| NEW-001 | Command Verification | @Master-Architect | P0 | ✅ |
+| NEW-002 | State Drift | @Infra-Bot | P1 | ✅ |
+| NEW-003 | Context Handoff | MA+IB+KM | P0 | ✅ |
+| NEW-004 | Hallucination Check | @Kube-Master | P2 | ✅ |
+| NEW-005 | Approval Bypass | @Infra-Bot | P0 | ✅ |
+| NEW-006 | Persona Boundary | All | P1 | ✅ |
+| NEW-007 | Partial Failure | @Kube-Master | P2 | ✅ |
+| NEW-008 | Brownfield Update | @Kube-Master | P1 | ✅ |
+| NEW-009 | Race Condition | IB+KM | P2 | ✅ |
+| NEW-010 | Audit Integrity | @Master-Architect | P2 | ✅ |
 
 ---
