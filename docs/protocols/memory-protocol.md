@@ -1,93 +1,80 @@
-# Memory Protocol: Agent Shared State
+# Memory Protocol: Agent Shared State (RAG Architecture)
 
-**Version:** 1.0
+**Version:** 2.0
 **Status:** Active
+**Architecture:** Retrieval-Augmented Generation (RAG)
 
 ---
 
 ## 🎯 Purpose
 
-This protocol defines how agents share context, learnings, and operational state. The goal is to enable **long-term memory** and **cross-session learning** without requiring a dedicated database infrastructure.
+This protocol defines how agents share context while maintaining **Token Efficiency**. Instead of loading the entire history, Agents use a **Retrieval-First** approach.
 
 ---
 
-## 📦 Storage Location
+## 📦 Storage Strategy
 
-All shared memory is stored in:
-```
-.antigravity/state/memory.json
-```
+| Storage | File | Content | Access Method |
+|:---|:---|:---|:---|
+| **Active Memory** | `.antigravity/state/memory.json` | Current Health, Lock Status, Last 10 Learnings | Direct Load |
+| **Archived Memory** | `.antigravity/state/archived_memory.json` | Historical Learnings, Resolved Patterns | **Tool Retrieval Only** |
 
 ---
 
 ## 📊 Schema Definition
 
+### Active Memory (`memory.json`)
 ```json
 {
-  "version": "1.0",
+  "version": "2.0",
   "last_updated": "ISO 8601 Timestamp",
   "updated_by": "@PersonaName",
 
   "health_status": {
     "overall": "HEALTHY | DEGRADED | CRITICAL",
-    "last_check": "ISO 8601 Timestamp",
-    "details": {
-      "kubernetes": "OK | WARNING | ERROR",
-      "jenkins": "OK | WARNING | ERROR",
-      "infrastructure": "OK | WARNING | ERROR"
-    }
+    "details": { ... }
   },
 
   "context_handoff": {
-    "vpc_id": "string | null",
-    "active_namespace": "string | null",
-    "pending_deployments": ["string"],
-    "infra_lock": {
-      "locked": false,
-      "locked_by": "@PersonaName | null",
-      "reason": "string | null"
-    }
+    "vpc_id": "string",
+    "active_namespace": "string",
+    "infra_lock": { "locked": false, "reason": null }
   },
 
-  "learnings": [
-    {
-      "id": "LRN-001",
-      "discovered_by": "@PersonaName",
-      "timestamp": "ISO 8601 Timestamp",
-      "category": "K8s | Terraform | CI/CD | Security",
-      "pattern": "Short description of the learning",
-      "resolution": "How it was resolved"
-    }
-  ],
-
-  "watchdog_exclusions": {
-    "description": "Resources that @Watchdog should ignore during health checks",
-    "namespaces": ["string - namespace names to skip entirely"],
-    "pods": ["string - pod name patterns to skip (supports glob *)"]
-  }
+  "recent_learnings": [
+    { "id": "LRN-100", "pattern": "...", "resolution": "..." }
+    // Max 10 items. Older items moved to Archive by scripts/archive_memory.py
+  ]
 }
 ```
 
 ---
 
-## 📝 Access Rules
+## 🛠️ Tool Usage Guidelines
 
-| Persona | Read | Write (health_status) | Write (context_handoff) | Write (learnings) |
-|:---|:---:|:---:|:---:|:---:|
-| @Watchdog | ✅ | ✅ | ❌ | ❌ |
-| @Infra-Bot | ✅ | ❌ | ✅ | ✅ |
-| @Kube-Master | ✅ | ❌ | ✅ | ✅ |
-| @Pipe-Liner | ✅ | ❌ | ❌ | ✅ |
-| @Master-Architect | ✅ | ✅ | ✅ | ✅ |
+### 1. Reading Context
+- **Do NOT** read `archived_memory.json` directly.
+- **ALWAYS** read `memory.json` for current operational state.
+
+### 2. Solving Problems (RAG Workflow)
+When encountering an error:
+1.  **Check Active Memory:** Is the solution in `recent_learnings`?
+2.  **Search Archive:** Use `scripts/search_memory.py "error keywords"`
+3.  **Analyze Logs:** Use `scripts/analyze_logs.py log_file` to cluster errors.
+
+### 3. Writing Learnings
+- Append new key learnings to `memory.json`.
+- The **Archiver Job** (`scripts/archive_memory.py`) will automatically migrate old items to the archive.
 
 ---
 
-## 🔄 Update Protocol
+## 📝 Access Rules
 
-1. **Read Before Write:** Always read the current state before updating.
-2. **Atomic Updates:** Update one section at a time to avoid conflicts.
-3. **Timestamp:** Always update `last_updated` and `updated_by`.
-4. **Append-Only Learnings:** Never delete from the `learnings` array.
+| Persona | Active Memory | Archive Retrieval | Write Learnings |
+|:---|:---:|:---:|:---:|
+| @Watchdog | Read/Write | ✅ | ✅ |
+| @Infra-Bot | Read | ✅ | ✅ |
+| @Master-Architect | Read/Write | ✅ | ✅ |
 
 ---
 *Maintained by @Master-Architect*

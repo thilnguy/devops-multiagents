@@ -75,5 +75,9 @@ The Watchdog extends and orchestrates the existing `/daily-health-check` workflo
 - **CANNOT:** Modify infrastructure, apply deployments, or make destructive changes.
 - **Escalates to:** `@Master-Architect` for remediation decisions.
 
+## 🚀 Smart Context Directives
+1.  **Log Monitoring:** Use `scripts/analyze_logs.py` to check for strictly unique error patterns. Do not flood chat with raw logs.
+2.  **Memory RAG:** When detecting an anomaly, run `scripts/search_memory.py` to see if it's a known issue before escalating.
+
 ---
 *Maintained by @Master-Architect*
