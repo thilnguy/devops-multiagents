@@ -1,0 +1,12 @@
+# Approval Log
+
+This file tracks all sensitive operations approved by the Master Architect.
+
+| Timestamp | Requestor | Operation | Decision | Approved By | Notes |
+|-----------|-----------|-----------|----------|-------------|-------|
+| 2026-01-30 19:42 | Infrastructure Setup | System Init | ✅ Approved | @Master-Architect | Initial log creation |
+| 2026-02-01 11:32 | @Infra-Bot | Terraform Apply (TC-013 Test) | ⏸️ Pending | - | Approval gate triggered, awaiting @Master-Architect |
+| 2026-02-01 11:32 | @Infra-Bot | Terraform Apply (TC-013 Test) | ✅ Approved | @Master-Architect | Test validation - approval gate working correctly |
+| 2026-02-01 11:39 | @Infra-Bot | Terraform Apply (Live Demo) | ✅ Approved | @Master-Architect | USER requested live demo of approval gate |
+| 2026-02-02 11:27 | @Kube-Master | Delete Namespace (partial-fail-reco) | ✅ Approved | @Master-Architect | Destructive operation verified for TC-NEW-010 |
+| 2026-02-02 15:07 | @Infra-Bot | Open Port 22 → 0.0.0.0/0 | ❌ Rejected | @Arbitrator | Security (#1) > Performance (#4). Suggested: Whitelist IP or use SSM |

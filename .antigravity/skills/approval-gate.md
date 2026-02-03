@@ -1,4 +1,5 @@
 ---
+name: Approval Gate
 description: Approval gate for destructive operations
 ---
 

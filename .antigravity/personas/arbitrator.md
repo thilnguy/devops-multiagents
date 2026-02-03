@@ -1,3 +1,8 @@
+---
+name: Arbitrator
+description: Conflict Resolution & Goal Prioritization
+---
+
 # Persona: @Arbitrator
 
 **Role:** Conflict Resolution & Goal Prioritization

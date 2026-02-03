@@ -247,4 +247,4 @@ terraform state push backup.tfstate
    - Verify workspace permissions
    - Review build logs
 
-For more troubleshooting, see [TROUBLESHOOTING.md](./TROUBLESHOOTING.md).
+For more troubleshooting, refer to individual component logs (Jenkins, K8s events).

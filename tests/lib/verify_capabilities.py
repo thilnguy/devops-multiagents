@@ -110,7 +110,7 @@ def test_terraform() -> TestResult:
         return result
     
     # Check if we can validate terraform config
-    tf_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "infra", "terraform")
+    tf_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "infra", "terraform")
     if os.path.exists(tf_dir):
         print("Testing Terraform Validate...", end=" ", flush=True)
         start = time.time()

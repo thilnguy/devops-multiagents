@@ -45,7 +45,7 @@ pipeline {
                 }
                 stage('Ecosystem Validation') {
                     steps {
-                        sh 'python3 tests/validate_ecosystem.py || true'
+                        sh 'python3 tests/lib/validate_ecosystem.py || true'
                     }
                 }
             }
@@ -53,7 +53,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'python3 tests/verify_capabilities.py || true'
+                sh 'python3 tests/lib/verify_capabilities.py || true'
             }
         }
 

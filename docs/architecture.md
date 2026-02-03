@@ -31,6 +31,20 @@ This project implements a multi-agent system designed to automate DevOps tasks, 
     - Manages **Jenkins** pipelines and automated flows.
 - **Skills:** `jenkins-ops`.
 
+### 5. Watchdog (`watchdog`)
+- **Role:** Observability & Health Monitor.
+- **Responsibilities:**
+-     - Autonomous system health checks.
+-     - Alerts on drift or anomalies.
+- **Capabilities:** Passive monitoring, non-destructive queries.
+
+### 6. Arbitrator (`arbitrator`)
+- **Role:** Conflict Resolution.
+- **Responsibilities:**
+-     - Decides between conflicting agent proposals (e.g., Security vs. Speed).
+-     - Enforces policy and logical consistency.
+- **Capabilities:** Policy evaluation.
+
 ## Skills & Capabilities
 - **Terraform Plan/Sync:** Full IaC lifecycle management using Terraform MCP.
 - **Jenkins Ops:** Triggering and monitoring builds using Jenkins MCP.

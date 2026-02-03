@@ -8,7 +8,7 @@ import os
 import re
 import json
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PERSONAS_DIR = os.path.join(PROJECT_ROOT, ".antigravity", "personas")
 SKILLS_DIR = os.path.join(PROJECT_ROOT, ".antigravity", "skills")
 MCP_CONFIG_PATH = os.path.expanduser("~/.gemini/antigravity/mcp_config.json")
