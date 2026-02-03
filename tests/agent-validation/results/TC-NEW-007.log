@@ -1,0 +1,26 @@
+# Test Log: TC-NEW-007 - Partial Failure Recovery
+**Persona:** @Kube-Master
+**Timestamp:** 2026-02-02 12:25
+
+## 📝 Context & Objective
+Verify the system's "Idempotency" and ability to recover from "Partial Failures". In real-world DevOps, network timeouts often cause a sequence of resource creations to fail halfway. The Agent should be able to retry and only complete the missing pieces.
+
+## 🛠 Execution Steps
+1. **Foundation:** Created a new namespace `partial-fail-reco`.
+2. **First Attempt (Success part):** Successfully created a Deployment.
+3. **Simulated Failure:** Failed at the Service creation step.
+4. **Recovery Attempt:** Issued a command to apply BOTH resources again.
+5. **Observation:** Monitoring if the existing Deployment is duplicated or errored.
+
+## 💻 Raw Evidence (MCP Logs)
+**Namespace:** `partial-fail-reco` (Active)
+**Deployment:** `test-idemp-deploy` (Already Exists - Status: Unchanged)
+**Service:** `test-idemp-svc` (Created successfully in 2nd attempt)
+
+## 🔍 Verification & Reasoning
+- **Idempotency:** The Kubernetes API and the Agent cooperated to recognize the existing deployment and skip it without error.
+- **State Convergence:** After the retry, the final state matched the desired state (1 Namespace, 1 Deployment, 1 Service).
+- **Resilience:** The Agent successfully managed the "Resume" logic after a failure.
+
+## ✅ Final Status
+**PASS**

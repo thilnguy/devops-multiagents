@@ -1,0 +1,25 @@
+# Test Log: TC-NEW-008 - Brownfield Update Operations
+**Persona:** @Kube-Master
+**Timestamp:** 2026-02-02 12:16
+
+## 📝 Context & Objective
+Verify the ability to perform a **Zero-Downtime Rolling Update** on an existing (brownfield) application. The Agent must monitor the transition and ensure that at no point is the service unavailable.
+
+## 🛠 Execution Steps
+1. **Status Quo:** A `sample-api` deployment exists with 2 healthy replicas (v1: `nginx:alpine`).
+2. **The Update:** @Kube-Master issued an update to version v2 (`nginx:1.25-alpine`).
+3. **Traffic Management:** Configured `maxSurge: 1` and `maxUnavailable: 0` to ensure stability.
+4. **Real-time Monitoring:** The Agent polled the Pod status via MCP every few seconds during the rollout.
+
+## 💻 Raw Evidence (Monitoring Sequence)
+- **T+0s:** Progressing (2 old ready, 1 new creating). Total: 3.
+- **T+44s:** `sample-api-fdb98c...` (New Pod) is ready. Old pod termination initiated.
+- **T+110s:** 2 new pods Ready. All old pods removed.
+
+## 🔍 Verification & Reasoning
+- **Availability:** At all times, `ReadyReplicas` was >= 2. No downtime occurred.
+- **Rollout Integrity:** The `observedGeneration` was updated to the new spec version.
+- **Observability:** The Agent correctly interpreted the `Pod-template-hash` changes to track the transition.
+
+## ✅ Final Status
+**PASS**

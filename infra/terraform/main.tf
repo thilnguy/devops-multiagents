@@ -53,10 +53,10 @@ data "aws_region" "current" {}
 # -----------------------------------------------------------------------------
 locals {
   name_prefix = "${var.project_name}-${var.environment}"
-  
+
   # Use provided AZs or discover automatically
   azs = length(var.availability_zones) > 0 ? var.availability_zones : slice(data.aws_availability_zones.available.names, 0, 2)
-  
+
   common_tags = {
     Terraform   = "true"
     Environment = var.environment

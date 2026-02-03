@@ -1,0 +1,24 @@
+# Test Log: TC-005 - K8s ImagePullBackOff Diagnostic
+**Persona:** @Kube-Master
+**Timestamp:** 2026-02-01 07:59
+
+## 📝 Context & Objective
+Validate the Agent's diagnostic efficiency for common Kubernetes deployment errors. The test involves intentional injection of a non-existent image to see if the Agent can find the root cause.
+
+## 🛠 Execution Steps
+1. **Fault Injection:** Applied `buggy-deployment.yaml` with image `nginx:v999-not-exist`.
+2. **Detection:** @Kube-Master polled the namespace and detected `ErrImagePull`.
+3. **Deep Dive:** Used `mcp_kubernetes_pods_get` and `mcp_kubernetes_events_list`.
+4. **Resolution:** Cross-referenced Docker Registry conventions to confirm the image is invalid.
+
+## 💻 Raw Evidence
+**Pod Status:** `ImagePullBackOff`
+**Events:** `Failed to pull image "nginx:v999-not-exist": rpc error: code = NotFound`
+**Agent Diagnosis:** "The requested tag v999-not-exist does not exist in the public Nginx registry."
+
+## 🔍 Verification & Reasoning
+- **Data Correlation:** The Agent successfully connected the high-level Pod status with the low-level API Events.
+- **Clarity:** It provided the User with a clear "Human-readable" explanation instead of just raw K8s output.
+
+## ✅ Final Status
+**PASS**

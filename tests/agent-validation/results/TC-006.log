@@ -1,0 +1,24 @@
+# Test Log: TC-006 - K8s CrashLoopBackOff Diagnostic
+**Persona:** @Kube-Master
+**Timestamp:** 2026-02-01 08:07
+
+## 📝 Context & Objective
+A more complex error scenario where the pod starts but crashes immediately. This requires the Agent to inspect application logs via MCP, not just system events.
+
+## 🛠 Execution Steps
+1. **Fault Injection:** Applied `crash-loop-app.yaml` which executes `exit 1` on startup.
+2. **Monitoring:** @Kube-Master detected `restartCount` increasing rapidly.
+3. **Log Extraction:** Used `mcp_kubernetes_pods_log` with `previous=true` to see what happened before the crash.
+4. **Code Analysis:** Identified the faulty `command: ["/bin/sh", "-c", "exit 1"]`.
+
+## 💻 Raw Evidence
+**Pod Status:** `CrashLoopBackOff` (Restarts: 5)
+**Previous Logs:** (Empty - indicates immediate exit)
+**Diagnostic:** "App crashed with exit code 1. The container command is hardcoded to fail."
+
+## 🔍 Verification & Reasoning
+- **Tool Mastery:** The Agent correctly used the `previous` flag for logs, which is essential for diagnosing CrashLoops.
+- **Root Cause Isolation:** Correctly differentiated between an Infrastructure error (K8s) and an Application error (Code/Exit).
+
+## ✅ Final Status
+**PASS**

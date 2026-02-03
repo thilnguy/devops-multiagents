@@ -1,0 +1,24 @@
+# Test Log: TC-007 - Terraform Error Detection & Pair Programming
+**Persona:** @Infra-Bot
+**Timestamp:** 2026-02-01 08:15
+
+## 📝 Context & Objective
+Test the Agent's ability to debug HCL (HashiCorp Configuration Language) and act as a proactive "Coding Assistant" for infrastructure developers.
+
+## 🛠 Execution Steps
+1. **Fault Injection:** User created `test-invalid.tf` with a missing bracket and a fake attribute.
+2. **Scan:** @Infra-Bot scanned the directory and identified the new file.
+3. **Parsing:** The Agent mentally "parsed" the file and compared it against the AWS provider schema.
+4. **Correction:** Provided a corrected snippet and explained the syntax rules.
+
+## 💻 Raw Evidence
+**Error 1:** Missing `}` on line 7.
+**Error 2:** `invalid_attribute` is not a valid argument for `aws_security_group`.
+**Recommendation:** Renamed `invalid_attribute` to `description`.
+
+## 🔍 Verification & Reasoning
+- **Schema Awareness:** The Agent did not just find syntax errors, but also logic errors (invalid attributes) using its internal knowledge of the AWS provider.
+- **UX:** The feedback was constructive, not just critical.
+
+## ✅ Final Status
+**PASS**

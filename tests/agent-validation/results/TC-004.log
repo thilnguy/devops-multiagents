@@ -1,0 +1,24 @@
+# Test Log: TC-004 - Sample App Deployment & Quota Validation
+**Persona:** @Kube-Master
+**Timestamp:** 2026-02-01 07:51
+
+## 📝 Context & Objective
+Test the interaction between Pod specs and Namespace ResourceQuotas. This is a common point of failure in K8s clusters where users forget to define resource `requests` and `limits`.
+
+## 🛠 Execution Steps
+1. **Initial Deployment:** A minimal Nginx pod was deployed without resource definitions.
+2. **Failure Analysis:** The deployment failed with a Quota error. @Kube-Master intercepted the error.
+3. **Problem Solving:** The Agent identified that `ResourceQuota` requires explicit resource requests.
+4. **Fix Implementation:** The Agent deployed a `LimitRange` to automate default resource injection.
+
+## 💻 Raw Evidence
+**Error Message:** `failed quota: sandbox-quota: must specify requests.cpu,requests.memory`
+**Resolution:** Applied `LimitRange` for `devops-sandbox`.
+**Final Result:** `pod/nginx-6799fc88d8-xxxxx` status changed to `Running`.
+
+## 🔍 Verification & Reasoning
+- **Expertise:** The Agent demonstrated advanced K8s knowledge by proposing `LimitRange` as a global fix instead of just patching one Pod.
+- **Stability:** Confirmed that the "Safe Haven" (Sandbox) is now user-friendly while remaining constrained.
+
+## ✅ Final Status
+**PASS**

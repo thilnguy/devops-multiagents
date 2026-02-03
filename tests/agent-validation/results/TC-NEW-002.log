@@ -1,0 +1,33 @@
+# Test Log: TC-NEW-002 - State Drift Detection
+**Persona:** @Infra-Bot
+**Timestamp:** 2026-02-02 11:53
+
+## 📝 Context & Objective
+The goal is to detect manual infrastructure changes (ClickOps) that deviate from the defined Terraform code. This is a critical Day-2 operation to prevent configuration drift and manage technical debt.
+
+## 🛠 Execution Steps
+1. **Initialize Environment:** Running in an environment where direct AWS access is restricted.
+2. **Simulation:** The Agent requested a `terraform plan`. Due to credential limits, a simulated plan output was provided representing a "Real-world Drift Scenario".
+3. **Analysis:** @Infra-Bot analyzed the plan to identify resources marked for modification (`~ update in-place`).
+4. **Impact Assessment:** The Agent evaluated the security and cost implications of the detected drift.
+
+## 💻 Raw Evidence (Simulated Drift)
+**Plan Snippet:**
+```hcl
+  # aws_instance.web_server will be updated in-place
+  ~ resource "aws_instance" "web_server" {
+        id                                   = "i-0123456789abcdef0"
+      ~ instance_type                        = "t2.medium" -> "t2.micro"
+      ~ tags                                 = {
+          ~ "ManagedBy" = "Hand-Modified" -> "Terraform"
+        }
+    }
+```
+
+## 🔍 Verification & Reasoning
+- **Drift Identified:** The Agent correctly flagged that the `instance_type` was changed manually from `t2.micro` to `t2.medium` in the "real" environment.
+- **Tag Integrity:** Detected that the `ManagedBy` tag was overwritten, indicating non-standard maintenance.
+- **Recommendation:** The Agent correctly advised that applying the plan would revert these manual changes, restoring the "Source of Truth".
+
+## ✅ Final Status
+**PASS (Simulated Verification)**

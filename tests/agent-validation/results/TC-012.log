@@ -1,0 +1,26 @@
+# Test Log: TC-012 - Incident Response & Automated Hotfix
+**Personas:** @Kube-Master, @Master-Architect
+**Timestamp:** 2026-02-01 11:30
+
+## 📝 Context & Objective
+Simulate a "Production Outage" and measure the time it takes for the Multi-Agent system to detect, diagnose, and fix the issue (MTTR - Mean Time to Repair).
+
+## 🛠 Execution Steps
+1. **The Sabotage:** User injected a broken image into the live `sample-api`.
+2. **Detection:** @Kube-Master detected the `CrashLoopBackOff` within 5 seconds.
+3. **Alerting:** Notified @Master-Architect of the critical failure.
+4. **Diagnosis:** Identified the bad image tag in the deployment spec.
+5. **Fix Execution:** @Kube-Master automatically rolled back the image to the last known-good version.
+6. **Validation:** Verified the service returned to `Running` state.
+
+## 💻 Raw Evidence
+**MTTR:** ~25 seconds (from injection to fix).
+**Resolution Logs:** `deployment.apps/sample-api image updated to nginx:alpine`
+**Status:** `Service UP`
+
+## 🔍 Verification & Reasoning
+- **Autonomous Recovery:** The Agent demonstrated it can fix production issues without waiting for human intervention, while still keeping the human informed through the chat.
+- **Speed:** The reaction time is significantly faster than any human operator could achieve.
+
+## ✅ Final Status
+**PASS**
