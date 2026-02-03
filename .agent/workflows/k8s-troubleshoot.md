@@ -19,6 +19,9 @@ This workflow guides the Kube Master persona through systematic K8s diagnostics.
 ## Steps
 
 ### Step 1: Identify Problem Pods
+*Skill Used: `k8s-troubleshoot`*
+
+> @Kube-Master: Identify and isolate workloads affecting cluster stability.
 
 // turbo
 ```bash

@@ -19,8 +19,9 @@ This workflow enables automated GitHub interactions for code and project managem
 ## Steps
 
 ### Pull Request Management
+*Skill Used: `mcp-github-flow`*
 
-#### List Open PRs
+> @Master-Architect: Ensure all Pull Requests are reviewed and processed according to project standards.
 
 ```
 mcp_github_list_pull_requests with owner="<ORG>" repo="devops_multiagents" state="open"
@@ -51,8 +52,9 @@ mcp_github_create_pull_request_review with owner="<ORG>" repo="devops_multiagent
 ```
 
 ### Issue Management
+*Skill Used: `mcp-github-flow`*
 
-#### List Open Issues
+> @Master-Architect: Ensure incoming issues are triaged, labeled, and prioritized effectively.
 
 ```
 mcp_github_list_issues with owner="<ORG>" repo="devops_multiagents" state="open"

@@ -18,6 +18,9 @@ This workflow guides comprehensive security review across all components.
 ## Steps
 
 ### Phase 1: Kubernetes Security Audit (Kube Master)
+*Skill Used: `security-audit`*
+
+> @Kube-Master: Ensure cluster security posture by auditing privileges, RBAC, and network policies.
 
 #### 1.1 Check Pod Security
 
@@ -68,6 +71,9 @@ kubectl get networkpolicies -A
 ```
 
 ### Phase 2: Terraform Security Review (Infra Bot)
+*Skill Used: `security-audit`*
+
+> @Infra-Bot: Ensure infrastructure code is free of secrets and misconfigurations.
 
 #### 2.1 Check for Hardcoded Secrets
 
@@ -93,6 +99,9 @@ grep -A 10 "ingress" infra/terraform/ --include="*.tf" | grep "0.0.0.0/0"
 ```
 
 ### Phase 3: GitHub Repository Security
+*Skill Used: `security-audit`*
+
+> @Master-Architect: Ensure repository history contains no credential leaks.
 
 #### 3.1 Check for Exposed Secrets
 

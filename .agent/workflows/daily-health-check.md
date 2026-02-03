@@ -19,6 +19,9 @@ This automated workflow performs comprehensive health checks across all systems.
 ## Steps
 
 ### Step 1: Kubernetes Health (Kube Master)
+*Skill Used: `k8s-troubleshoot`*
+
+> @Kube-Master: Ensure cluster health metrics and node status are within operational limits.
 
 Check cluster status:
 ```bash
@@ -58,6 +61,9 @@ kubectl get svc -n devops-multiagents
 ```
 
 ### Step 3: Infrastructure State (Infra Bot)
+*Skill Used: `terraform-plan`*
+
+> @Infra-Bot: Ensure infrastructure state is consistent and drift-free.
 
 Navigate and check Terraform:
 ```bash
@@ -70,6 +76,9 @@ terraform plan -detailed-exitcode 2>/dev/null; echo "Exit code: $?"
 ```
 
 ### Step 4: CI/CD Health (Pipe Liner)
+*Skill Used: `jenkins-ops`*
+
+> @Pipe-Liner: Ensure CI/CD pipeline availability and report build trends.
 
 Using MCP to check Jenkins:
 ```
@@ -82,6 +91,9 @@ mcp_jenkins_getJobs with limit=5
 ```
 
 ### Step 5: MCP Server Connectivity
+*Skill Used: `system-check`*
+
+> @Master-Architect: Ensure all MCP toolchains are active and responsive.
 
 Run health check script:
 ```bash

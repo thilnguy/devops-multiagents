@@ -29,6 +29,9 @@ aws sts get-caller-identity
 ```
 
 ### Step 2: Initialize Terraform
+*Skill Used: `terraform-plan`*
+
+> @Infra-Bot: Ensure the Terraform working directory is initialized and ready for planning.
 
 Navigate to terraform directory:
 ```bash
@@ -68,6 +71,9 @@ Review plan output for:
 **STOP if any unexpected destroys are shown!**
 
 ### Step 5: Apply Changes
+*Skill Used: `terraform-sync`*
+
+> @Infra-Bot: Synchronize infrastructure state by applying the approved plan.
 
 > [!CAUTION]
 > ⚠️ **REQUIRES APPROVAL** - This step modifies infrastructure.

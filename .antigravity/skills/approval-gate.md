@@ -74,7 +74,7 @@ The following may proceed WITHOUT explicit approval:
 
 ## Audit Trail
 
-All approval requests must be logged to: `artifacts/approval-log.md`
+All approval requests must be logged to: `.antigravity/logs/approval.log`
 
 **Log Format:**
 `| YYYY-MM-DD HH:MM | @Agent | Operation | ✅/❌/⏸️ | @Master-Architect | Reason/Notes |`

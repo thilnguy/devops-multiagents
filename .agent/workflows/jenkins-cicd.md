@@ -23,6 +23,9 @@ This workflow guides the Pipe Liner persona through Jenkins operations.
 ## Steps
 
 ### Step 1: List Available Jobs
+*Skill Used: `jenkins-ops`*
+
+> @Pipe-Liner: Ensure visibility of available CI/CD pipelines.
 
 Using MCP:
 ```
@@ -42,6 +45,9 @@ mcp_jenkins_getJob with jobFullName="DevOps/multiagent-deploy"
 ```
 
 ### Step 3: Trigger a Build
+*Skill Used: `jenkins-ops`*
+
+> @Pipe-Liner: Trigger and oversee the execution of the build pipeline.
 
 Without parameters:
 ```

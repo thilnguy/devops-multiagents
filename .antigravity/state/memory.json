@@ -1,0 +1,52 @@
+{
+    "version": "1.1",
+    "last_updated": "2026-02-02T15:00:00+01:00",
+    "updated_by": "@Watchdog",
+    "health_status": {
+        "overall": "DEGRADED",
+        "last_check": "2026-02-02T14:52:06+01:00",
+        "details": {
+            "kubernetes": "WARNING",
+            "jenkins": "OK",
+            "infrastructure": "OK"
+        },
+        "notes": "Degraded due to test fixtures in devops-sandbox (excluded from alerts)"
+    },
+    "context_handoff": {
+        "vpc_id": null,
+        "active_namespace": "devops-multiagents",
+        "pending_deployments": [],
+        "infra_lock": {
+            "locked": false,
+            "locked_by": null,
+            "reason": null
+        }
+    },
+    "learnings": [
+        {
+            "id": "LRN-001",
+            "discovered_by": "@Kube-Master",
+            "timestamp": "2026-02-01T07:51:00+01:00",
+            "category": "K8s",
+            "pattern": "ResourceQuota requires pods to specify resource requests",
+            "resolution": "Apply LimitRange to provide defaults for pods without explicit requests"
+        },
+        {
+            "id": "LRN-002",
+            "discovered_by": "@Watchdog",
+            "timestamp": "2026-02-02T15:00:00+01:00",
+            "category": "K8s",
+            "pattern": "Test fixtures in sandbox namespaces cause false positive alerts",
+            "resolution": "Add namespace to watchdog_exclusions to suppress noise"
+        }
+    ],
+    "watchdog_exclusions": {
+        "namespaces": [
+            "devops-sandbox"
+        ],
+        "pods": [
+            "buggy-image-app-*",
+            "crash-demo-*"
+        ]
+    }
+}

@@ -19,8 +19,9 @@ This workflow orchestrates a complete deployment from infrastructure provisionin
 ## Steps
 
 ### Phase 1: Infrastructure Planning (Infra Bot)
+*Skill Used: `terraform-plan`*
 
-1. Navigate to Terraform directory:
+> @Infra-Bot: Ensure infrastructure changes are identified and planned for review.
 ```bash
 cd infra/terraform
 ```
@@ -49,6 +50,8 @@ terraform plan -out=deploy.tfplan
 
 ### Phase 2: Infrastructure Apply (Infra Bot)
 
+> @Infra-Bot: Execute the approved infrastructure changes.
+
 > [!CAUTION]
 > ⚠️ **REQUIRES APPROVAL** - Destructive operation. Request approval from @Master-Architect before proceeding.
 
@@ -64,8 +67,9 @@ terraform output -json > /tmp/tf-outputs.json
 ```
 
 ### Phase 3: Kubernetes Deployment (Kube Master)
+*Skill Used: `k8s-troubleshoot` (includes apply)*
 
-8. Navigate to Kubernetes directory:
+> @Kube-Master: Ensure application components are correctly deployed to the cluster.
 ```bash
 cd infra/kubernetes/base
 ```
@@ -105,7 +109,7 @@ kubectl get pods -n devops-multiagents -w --timeout=120s
 
 ### Phase 4: Validation (Master Architect)
 
-14. Run health check:
+> @Master-Architect: Validate the deployment health and check for any runtime errors.
 // turbo
 ```bash
 kubectl get all -n devops-multiagents

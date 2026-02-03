@@ -62,7 +62,7 @@ graph TD
 
 ## 📝 Logging
 
-All decisions are logged to `artifacts/approval-log.md` with the format:
+All decisions are logged to `.antigravity/logs/approval.log` with the format:
 | Timestamp | Conflict | Decision | Reasoning |
 
 ---

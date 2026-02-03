@@ -27,7 +27,7 @@ The Watchdog is a proactive agent that continuously monitors the health of the D
 The Watchdog extends and orchestrates the existing `/daily-health-check` workflow, adding:
 - **Autonomous Scheduling:** Runs every 15 minutes (or on-demand).
 - **Alert Thresholds:** Triggers escalation based on predefined rules.
-- **Memory Logging:** Writes status to `artifacts/agent-memory.json`.
+- **Memory Logging:** Writes status to `.antigravity/state/memory.json`.
 
 ---
 
