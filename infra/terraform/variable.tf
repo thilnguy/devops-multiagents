@@ -139,3 +139,77 @@ variable "enable_cluster_creator_admin_permissions" {
   type        = bool
   default     = true
 }
+
+# -----------------------------------------------------------------------------
+# RDS Configuration
+# -----------------------------------------------------------------------------
+variable "enable_rds" {
+  description = "Enable RDS database deployment"
+  type        = bool
+  default     = false  # Disabled by default for demo
+}
+
+variable "rds_instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t4g.micro"  # ARM64 Graviton, smallest for demo
+}
+
+variable "rds_allocated_storage" {
+  description = "Allocated storage in GB"
+  type        = number
+  default     = 20
+}
+
+variable "rds_max_allocated_storage" {
+  description = "Max allocated storage for autoscaling in GB"
+  type        = number
+  default     = 100
+}
+
+variable "rds_db_name" {
+  description = "Database name"
+  type        = string
+  default     = "devops_agents"
+}
+
+variable "rds_username" {
+  description = "Database master username"
+  type        = string
+  default     = "admin"
+  sensitive   = true
+}
+
+variable "rds_password" {
+  description = "Database master password (use secrets manager in production)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "rds_multi_az" {
+  description = "Enable Multi-AZ for high availability (adds ~$50/mo)"
+  type        = bool
+  default     = false  # Use Cross-Region Backup instead for demo
+}
+
+variable "rds_backup_retention_days" {
+  description = "Number of days to retain backups"
+  type        = number
+  default     = 7
+}
+
+variable "enable_cross_region_backup" {
+  description = "Enable Cross-Region Backup replication for DR (~$5/mo)"
+  type        = bool
+  default     = true  # Cheaper DR option
+}
+
+# -----------------------------------------------------------------------------
+# Security & Audit Configuration
+# -----------------------------------------------------------------------------
+variable "enable_audit_logging" {
+  description = "Enable CloudTrail audit logging for Terraform API calls"
+  type        = bool
+  default     = false  # Enable in production
+}
