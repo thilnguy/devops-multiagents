@@ -53,6 +53,12 @@ pipeline {
                         sh 'python3 tests/lib/validate_ecosystem.py || true'
                     }
                 }
+                stage('Docker Arch Check') {
+                    steps {
+                        // Validate base images support ARM64 for Graviton deployment
+                        sh 'python3 tests/scripts/validate_docker_arch.py nginx:alpine python:3.11-slim --strict || true'
+                    }
+                }
             }
         }
 
