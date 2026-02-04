@@ -1,8 +1,9 @@
 # 🤖 DevOps Multi-Agent Ecosystem
 
-![System Status](https://img.shields.io/badge/System-Production%20Ready-success)
-![Maturity](https://img.shields.io/badge/Maturity-v2.1-blue)
-![Agents](https://img.shields.io/badge/Agents-Autonomous-purple)
+![System Status](https://img.shields.io/badge/Status-Production%20Ready-success)
+![Maturity](https://img.shields.io/badge/Assessment-8.5%2F10-blue)
+![Validation](https://img.shields.io/badge/Test%20Pass%20Rate-100%25-brightgreen)
+![Version](https://img.shields.io/badge/Version-v2.1--Hardened-purple)
 
 **A next-generation DevOps automation platform powered by multiple specialized AI Agents collaborating via the Model Context Protocol (MCP).**
 
@@ -10,12 +11,17 @@
 
 The **DevOps Multi-Agent Ecosystem** replaces monolithic automation scripts with a team of distinct AI personas. Each agent possesses specialized "skills" (Terraform, Kubernetes, Jenkins, GitHub) and adheres to strict security boundaries. They collaborate to plan, deploy, monitor, and heal infrastructure.
 
-### 🌟 Key Features
+### 🌟 Key Features (v2.1 Hardened)
 *   **Role-Based AI Personas:** Specialized agents for Architecture, Infrastructure, K8s, and CI/CD.
-*   **MCP Integration:** Seamless connection to external tools (GitHub, Jenkins, K8s) via standardized protocol.
-*   **Self-Healing Infrastructure:** Autonomous Watchdog agents detect and propose fixes for drift and errors.
-*   **Tiered Validation:** Comprehensive testing strategy from smoke tests to deep cognitive audits.
-*   **Security First:** Strict approval gates and persona-based permission boundaries.
+*   **Production-Grade Security:** 
+    *   **IRSA:** IAM Roles for Service Accounts for least-privilege AWS access.
+    *   **Secrets Management:** RDS credentials managed via AWS Secrets Manager.
+    *   **Audit Logging:** Full CloudTrail integration for tracking Terraform API calls.
+*   **Infrastructure Reliability:** 
+    *   **State Locking:** Prevents race conditions during concurrent agent operations.
+    *   **Spot Fallback:** High availability for non-prod environments using diversified instance types.
+*   **Autonomous Coordination:** A dedicated [Agent Coordination Protocol](docs/protocols/agent-coordination.md) prevents conflicts and racing.
+*   **Tiered Validation:** 100% pass rate across 25 comprehensive test cases (Quick, Standard, Deep).
 
 ---
 
@@ -23,12 +29,12 @@ The **DevOps Multi-Agent Ecosystem** replaces monolithic automation scripts with
 
 | Persona | Role | Responsibilities | Tools (MCP) |
 |:---:|:---|:---|:---|
-| 🧠 | **Master Architect** | Orchestration, Strategy, Integration | GitHub, Planning |
-| 🏗️ | **Infra Bot** | Infrastructure as Code (IaC) | Terraform, AWS |
+| 🧠 | **Master Architect** | Orchestration, Strategy, Approval Gates | GitHub, Logic Arbitrator |
+| 🏗️ | **Infra Bot** | Infrastructure as Code (IaC) | Terraform, AWS, SecretsMgr |
 | ☸️ | **Kube Master** | Container Orchestration | Kubernetes, Helm |
 | 🚀 | **Pipe Liner** | CI/CD & Release Management | Jenkins |
-| 👁️ | **Watchdog** | Observability & Security | Logs, Metrics |
-| ⚖️ | **Arbitrator** | Conflict Resolution | Policy Enforcement |
+| 👁️ | **Watchdog** | Observability & Self-Healing | K8s Events, Cost Explorer |
+| ⚖️ | **Arbitrator** | Conflict Resolution & Policy | Logic Arbitrator, Policy |
 
 ---
 
@@ -37,10 +43,10 @@ The **DevOps Multi-Agent Ecosystem** replaces monolithic automation scripts with
 ### Prerequisites
 *   **Python:** 3.8+
 *   **Terraform:** 1.0+
-*   **Kubernetes:** `kubectl` configured with access to a cluster (e.g., Docker Desktop).
-*   **Node.js:** 18+ (for some tool dependencies).
+*   **Kubernetes:** `kubectl` configured with cluster access.
+*   **AWS CLI:** Configured with appropriate permissions (if deploying to AWS).
 
-### Installation
+### Installation & Setup
 
 1.  **Clone the Repository**
     ```bash
@@ -53,10 +59,11 @@ The **DevOps Multi-Agent Ecosystem** replaces monolithic automation scripts with
     ```bash
     cp .env.example .env
     ```
-    > **Note:** Ensure you configure your `ANTIGRAVITY_MCP_CONFIG` or local MCP settings for GitHub and Jenkins access.
+    > [!IMPORTANT]
+    > Ensure `RDS_PASSWORD` is handled via `.env` for local testing; in production, the system automatically retrieves it from AWS Secrets Manager.
 
 3.  **Verify Setup**
-    Run the ecosystem validator to check dependencies.
+    Run the ecosystem validator to check dependencies and MCP connectivity.
     ```bash
     python3 tests/validate_ecosystem.py
     ```
@@ -71,9 +78,18 @@ We employ a **Hybrid Execution Model** combining local CLI execution with Agent 
 |---|---|---|---|
 | **Quick** | `/agent-validation-quick` | Smoke test for core syntax & drift detection. | ~30s |
 | **Standard** | `/agent-validation-standard` | Daily checks including MCP connectivity. | ~3m |
-| **Deep** | `/agent-validation-deep` | Full release audit, security & persona bounds. | ~10m |
+| **Deep** | `/agent-validation-deep` | Full release audit (25 TCs), security & persona bounds. | ~10m |
 
-👉 **[See Detailed Testing Documentation](tests/README.md)**
+👉 **[See Latest Deep Validation Report](tests/results/reports/deep-validation-2026-02-04-1831.md)**
+
+---
+
+## 📚 Documentation Map
+
+*   **Roadmap & HARDENING:** [System Hardening Walkthrough](docs/system-hardening-walkthrough.md) ✅
+*   **Readiness Assessment:** [Production Readiness Assessment](docs/production-readiness-assessment.md) (Score: 8.5/10)
+*   **Optimization:** [LLM Efficiency Guide](docs/llm-optimization-guide.md) | [Infrastructure Cost Optimization](docs/infrastructure-cost-optimization.md)
+*   **Protocols:** [Agent Coordination](docs/protocols/agent-coordination.md) | [Memory Management](docs/protocols/memory-protocol.md)
 
 ---
 
@@ -82,28 +98,13 @@ We employ a **Hybrid Execution Model** combining local CLI execution with Agent 
 ```text
 .
 ├── .agent/                 # Agent workflows and definitions
-│   └── workflows/          # Automation workflows (Quick, Standard, Deep)
-├── .antigravity/           # Framework configuration & state
-├── artifacts/              # Generated logs, plans, and persistent data
-├── docs/                   # Detailed documentation
-├── infra/                  # Infrastructure as Code
-│   ├── k8s/                # Kubernetes manifests
-│   └── terraform/          # Terraform modules
-├── pipelines/              # CI/CD definitions (Jenkinsfile)
-└── tests/                  # Validation suites & scripts
-    ├── results/            # generated validation reports
-    └── scripts/            # hybrid execution scripts
+├── .antigravity/           # Framework configuration & personas
+├── docs/                   # Detailed documentation & protocols
+├── infra/                  # Infrastructure as Code (TF & K8s)
+├── pipelines/              # CI/CD definitions (Jenkins)
+├── scripts/                # Utility scripts (Log analysis, RAG)
+└── tests/                  # Validation suites & reports
 ```
 
----
-
-## 🤝 Contributing
-
-1.  Fork the repository.
-2.  Create a feature branch (`git checkout -b feature/amazing-agent`).
-3.  Run the **Quick Validation** (`/agent-validation-quick`) to ensure stability.
-4.  Commit changes and open a Pull Request.
-
 ## 📄 License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

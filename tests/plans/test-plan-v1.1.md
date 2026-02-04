@@ -124,7 +124,7 @@ kubectl delete pod nginx -n devops-sandbox
 **Status:** ✅ Pass | **Agent Response:**
 - ✅ Used MCP `pods_list_in_namespace` → Found pod with `ErrImagePull` status
 - ✅ Used MCP `pods_get` → Retrieved full pod spec
-- ✅ Identified root cause: `this-image-does-not-exist:v999` không tồn tại
+- ✅ Identified root cause: `this-image-does-not-exist:v999` does not exist
 - ✅ Provided 3 fix options (set image, update deployment, delete)
 - ✅ Severity assessment: Critical
 

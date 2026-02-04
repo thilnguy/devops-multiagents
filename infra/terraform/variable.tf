@@ -113,7 +113,7 @@ variable "eks_node_group_capacity_type" {
   description = "Capacity type for EKS managed node groups (ON_DEMAND or SPOT)"
   type        = string
   default     = "SPOT" # Default to Spot for maximum savings
-  
+
   validation {
     condition     = contains(["ON_DEMAND", "SPOT"], var.eks_node_group_capacity_type)
     error_message = "Capacity type must be ON_DEMAND or SPOT."
@@ -122,7 +122,7 @@ variable "eks_node_group_capacity_type" {
 
 variable "eks_node_group_scaling_config" {
   description = "Scaling configuration for EKS managed node groups"
-  type        = object({
+  type = object({
     desired_size = number
     max_size     = number
     min_size     = number
@@ -146,13 +146,13 @@ variable "enable_cluster_creator_admin_permissions" {
 variable "enable_rds" {
   description = "Enable RDS database deployment"
   type        = bool
-  default     = false  # Disabled by default for demo
+  default     = false # Disabled by default for demo
 }
 
 variable "rds_instance_class" {
   description = "RDS instance class"
   type        = string
-  default     = "db.t4g.micro"  # ARM64 Graviton, smallest for demo
+  default     = "db.t4g.micro" # ARM64 Graviton, smallest for demo
 }
 
 variable "rds_allocated_storage" {
@@ -190,7 +190,7 @@ variable "rds_password" {
 variable "rds_multi_az" {
   description = "Enable Multi-AZ for high availability (adds ~$50/mo)"
   type        = bool
-  default     = false  # Use Cross-Region Backup instead for demo
+  default     = false # Use Cross-Region Backup instead for demo
 }
 
 variable "rds_backup_retention_days" {
@@ -202,7 +202,7 @@ variable "rds_backup_retention_days" {
 variable "enable_cross_region_backup" {
   description = "Enable Cross-Region Backup replication for DR (~$5/mo)"
   type        = bool
-  default     = true  # Cheaper DR option
+  default     = true # Cheaper DR option
 }
 
 # -----------------------------------------------------------------------------
@@ -211,5 +211,5 @@ variable "enable_cross_region_backup" {
 variable "enable_audit_logging" {
   description = "Enable CloudTrail audit logging for Terraform API calls"
   type        = bool
-  default     = false  # Enable in production
+  default     = false # Enable in production
 }

@@ -3,36 +3,36 @@ import json
 import subprocess
 
 def check_mcp_config():
-    """Kiểm tra file cấu hình MCP của hệ thống"""
-    # Đường dẫn config từ request của user
+    """Verify system MCP configuration file"""
+    # Config path from user's environment
     config_path = os.path.expanduser("~/.gemini/antigravity/mcp_config.json")
     
-    print("🔍 [1/3] Kiểm tra file cấu hình MCP...")
+    print("🔍 [1/3] Checking MCP configuration file...")
     if os.path.exists(config_path):
         try:
             with open(config_path, 'r') as f:
                 config = json.load(f)
                 servers = config.get("mcpServers", {})
-                print(f"✅ Tìm thấy {len(servers)} servers: {', '.join(servers.keys())}")
+                print(f"✅ Found {len(servers)} servers: {', '.join(servers.keys())}")
                 
-                # Kiểm tra riêng server 'mcp-fetch' và 'jenkins'
+                # Specifically check 'mcp-fetch' and 'jenkins' servers
                 if "mcp-fetch" in servers:
-                    print("   ✨ Server 'mcp-fetch' đã được cấu hình.")
+                    print("   ✨ Server 'mcp-fetch' is configured.")
                 if "jenkins" in servers:
-                    print("   ✨ Server 'jenkins' đã được cấu hình.")
+                    print("   ✨ Server 'jenkins' is configured.")
                 else:
-                    print("   ⚠️ Server 'jenkins' chưa xuất hiện trong config.")
+                    print("   ⚠️ Server 'jenkins' is missing from config.")
                 return servers
         except Exception as e:
-            print(f"❌ Lỗi khi đọc file config: {e}")
+            print(f"❌ Error reading config file: {e}")
             return None
     else:
-        print(f"❌ Không tìm thấy file tại: {config_path}")
+        print(f"❌ File not found at: {config_path}")
         return None
 
 def check_project_structure():
-    """Kiểm tra các Persona và Skill đã được định nghĩa chưa"""
-    print("\n🔍 [2/3] Kiểm tra cấu trúc Project .antigravity/...")
+    """Verify if Personas and Skills are defined"""
+    print("\n🔍 [2/3] Checking .antigravity/ Project structure...")
     required_dirs = [".antigravity/personas", ".antigravity/skills"]
     cwd = os.getcwd()
     
@@ -40,21 +40,21 @@ def check_project_structure():
         dir_path = os.path.join(cwd, d)
         if os.path.exists(dir_path):
             files = os.listdir(dir_path)
-            print(f"✅ {d}: {len(files)} files sẵn sàng.")
+            print(f"✅ {d}: {len(files)} files ready.")
             
-            # Kiểm tra skill mcp-fetch-docs
+            # Check for mcp-fetch-docs skill
             if d == ".antigravity/skills":
                 if "mcp-fetch-docs.md" in files:
-                    print("   ✨ Skill 'mcp-fetch-docs' đã tồn tại.")
+                    print("   ✨ Skill 'mcp-fetch-docs' exists.")
                 else:
-                    print("   ⚠️ Thiếu skill 'mcp-fetch-docs.md'.")
+                    print("   ⚠️ Missing skill 'mcp-fetch-docs.md'.")
         else:
-            print(f"⚠️ Thiếu thư mục: {d}")
+            print(f"⚠️ Missing directory: {d}")
 
 def check_cli_tools():
-    """Kiểm tra các công cụ dòng lệnh mà MCP phụ thuộc vào"""
-    print("\n🔍 [3/4] Kiểm tra CLI Tools (Dependencies)...")
-    # Mỗi công cụ có thể có cách kiểm tra version khác nhau
+    """Check command line tools that MCP depends on"""
+    print("\n🔍 [3/4] Checking CLI Tools (Dependencies)...")
+    # Each tool may have a different way to check version
     tools = {
         "gh": ["--version"],
         "terraform": ["--version"],
@@ -64,62 +64,62 @@ def check_cli_tools():
     for tool, args in tools.items():
         try:
             subprocess.run([tool] + args, capture_output=True, check=True)
-            print(f"✅ {tool.upper()} đã được cài đặt.")
+            print(f"✅ {tool.upper()} is installed.")
         except FileNotFoundError:
-            print(f"❌ {tool.upper()} chưa được cài đặt (Không tìm thấy lệnh trong PATH).")
+            print(f"❌ {tool.upper()} is not installed (Command not found in PATH).")
         except subprocess.CalledProcessError:
-            # Một số tool có thể trả về exit code khác 0 nhưng vẫn tồn tại
-            print(f"⚠️ {tool.upper()} đã được cài đặt nhưng có cảnh báo khi kiểm tra version.")
+            # Some tools might return non-zero exit code but still exist
+            print(f"⚠️ {tool.upper()} is installed but returned a warning during version check.")
         except Exception as e:
-            print(f"❌ Lỗi khi kiểm tra {tool.upper()}: {e}")
+            print(f"❌ Error checking {tool.upper()}: {e}")
 
 def validate_mcp_servers(servers):
-    """Kiểm tra xem các server MCP có thể chạy được không"""
-    print("\n🔍 [4/4] Kiểm tra tính sẵn sàng của MCP Servers...")
+    """Check if MCP servers are executable"""
+    print("\n🔍 [4/4] Checking MCP Servers readiness...")
     if not servers:
-        print("⚠️ Không có server nào để kiểm tra.")
+        print("⚠️ No servers to check.")
         return
 
     for name, config in servers.items():
         command = config.get("command")
         args = config.get("args", [])
         
-        print(f"   ⚙️ Đang kiểm tra server '{name}'...")
+        print(f"   ⚙️ Checking server '{name}'...")
         
-        # Kiểm tra nếu là npx command
+        # Check if it's an npx command
         if command and ("npx" in command):
-            # Tìm package name trong args (phần tử đầu tiên không bắt đầu bằng '-')
+            # Find package name in args (first element not starting with '-')
             package = next((arg for arg in args if not arg.startswith("-")), None)
             if package:
                 try:
-                    # Chạy 'npm view' để kiểm tra package có tồn tại không (nhanh hơn info)
+                    # Run 'npm view' to check if package exists (faster than info)
                     result = subprocess.run(["npm", "view", package, "name"], capture_output=True, text=True, timeout=10)
                     if result.returncode == 0:
-                        print(f"      ✅ Package '{package}' tồn tại trên npm registry.")
+                        print(f"      ✅ Package '{package}' exists on npm registry.")
                     else:
                         error_msg = result.stderr.strip()
                         if "404" in error_msg:
-                            print(f"      ❌ Package '{package}' KHÔNG TỒN TẠI trên npm. Vui lòng kiểm tra lại tên package.")
+                            print(f"      ❌ Package '{package}' DOES NOT EXIST on npm. Please check the package name.")
                         elif "Access token expired" in error_msg:
-                            print(f"      ⚠️ Lỗi npm auth (Access token expired), nhưng package có thể vẫn tồn tại.")
+                            print(f"      ⚠️ npm auth error (Access token expired), but package might still exist.")
                         else:
-                            print(f"      ❌ Lỗi khi kiểm tra package '{package}': {error_msg.splitlines()[0] if error_msg else 'Unknown error'}")
+                            print(f"      ❌ Error checking package '{package}': {error_msg.splitlines()[0] if error_msg else 'Unknown error'}")
                 except subprocess.TimeoutExpired:
-                    print(f"      ⚠️ Timeout khi kiểm tra package '{package}'.")
+                    print(f"      ⚠️ Timeout checking package '{package}'.")
                 except Exception as e:
-                    print(f"      ❌ Lỗi khi kiểm tra package '{package}': {e}")
+                    print(f"      ❌ Error checking package '{package}': {e}")
             else:
-                print(f"      ⚠️ Không tìm thấy tên package trong args của '{name}'.")
+                print(f"      ⚠️ Package name not found in args for '{name}'.")
         else:
-            # Kiểm tra xem command có tồn tại không
+            # Check if command exists
             try:
-                # Dùng which để kiểm tra command
+                # Use which to check command
                 subprocess.run(["which", command], capture_output=True, check=True)
-                print(f"      ✅ Lệnh '{command}' tìm thấy trong hệ thống.")
+                print(f"      ✅ Command '{command}' found in system.")
             except subprocess.CalledProcessError:
-                print(f"      ❌ Không tìm thấy lệnh '{command}' trong PATH.")
+                print(f"      ❌ Command '{command}' not found in PATH.")
             except Exception as e:
-                print(f"      ⚠️ Không thể xác minh lệnh '{command}': {e}")
+                print(f"      ⚠️ Unable to verify command '{command}': {e}")
 
 if __name__ == "__main__":
     print("=== ANTIGRAVITY DEVOPS ECOSYSTEM HEALTH CHECK ===\n")
@@ -127,4 +127,4 @@ if __name__ == "__main__":
     check_project_structure()
     check_cli_tools()
     validate_mcp_servers(servers)
-    print("\n🚀 Kiểm tra hoàn tất!")
+    print("\n🚀 Health check complete!")

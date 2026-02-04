@@ -83,7 +83,7 @@ resource "aws_cloudtrail" "terraform_audit" {
   name                          = "${local.name_prefix}-terraform-audit"
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs[0].bucket
   include_global_service_events = true
-  is_multi_region_trail         = false  # Single region for cost savings
+  is_multi_region_trail         = false # Single region for cost savings
   enable_logging                = true
 
   # Event selectors for management events

@@ -15,7 +15,7 @@ module "irsa_infra_bot" {
   version = "~> 5.0"
 
   role_name = "${local.name_prefix}-infra-bot"
-  
+
   # Trust policy for the EKS OIDC provider
   oidc_providers = {
     main = {

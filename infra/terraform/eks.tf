@@ -21,9 +21,9 @@ module "eks" {
 
       instance_types = var.eks_node_group_instance_types
       capacity_type  = var.eks_node_group_capacity_type
-      
+
       # Use AL2023 for better performance and ARM64 support
-      ami_type       = "AL2023_ARM_64_STANDARD" 
+      ami_type = "AL2023_ARM_64_STANDARD"
 
       min_size     = var.eks_node_group_scaling_config.min_size
       max_size     = var.eks_node_group_scaling_config.max_size

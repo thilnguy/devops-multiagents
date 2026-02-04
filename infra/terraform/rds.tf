@@ -84,29 +84,29 @@ resource "aws_db_instance" "main" {
   count = var.enable_rds ? 1 : 0
 
   identifier = "${local.name_prefix}-db"
-  
+
   # Engine
-  engine               = "postgres"
-  engine_version       = "15.4"
-  instance_class       = var.rds_instance_class
-  
+  engine         = "postgres"
+  engine_version = "15.4"
+  instance_class = var.rds_instance_class
+
   # Storage
   allocated_storage     = var.rds_allocated_storage
   max_allocated_storage = var.rds_max_allocated_storage
   storage_type          = "gp3"
   storage_encrypted     = true
-  
+
   # Credentials from Secrets Manager
   db_name  = var.rds_db_name
   username = var.rds_username
   password = var.rds_password != "" ? var.rds_password : random_password.rds[0].result
-  
+
   # Network
   db_subnet_group_name   = aws_db_subnet_group.main[0].name
   vpc_security_group_ids = [aws_security_group.rds[0].id]
   publicly_accessible    = false
   port                   = 5432
-  
+
   # High Availability
   multi_az = var.rds_multi_az
 
@@ -117,15 +117,15 @@ resource "aws_db_instance" "main" {
   delete_automated_backups  = false
   skip_final_snapshot       = var.environment != "production"
   final_snapshot_identifier = var.environment == "production" ? "${local.name_prefix}-final-snapshot" : null
-  
+
   # Performance
   performance_insights_enabled = var.environment == "production"
-  
+
   # Updates
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
   apply_immediately           = var.environment != "production"
-  
+
   tags = local.common_tags
 }
 
@@ -136,7 +136,7 @@ resource "aws_db_instance_automated_backups_replication" "cross_region" {
   count = var.enable_rds && var.enable_cross_region_backup ? 1 : 0
 
   source_db_instance_arn = aws_db_instance.main[0].arn
-  
+
   # Replicate to different region for DR
   # Note: This is a placeholder - actual replication requires provider alias for target region
   retention_period = var.rds_backup_retention_days
