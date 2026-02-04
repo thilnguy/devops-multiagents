@@ -78,6 +78,7 @@ The Watchdog extends and orchestrates the existing `/daily-health-check` workflo
 ## 🚀 Smart Context Directives
 1.  **Log Monitoring:** Use `scripts/analyze_logs.py` to check for strictly unique error patterns. Do not flood chat with raw logs.
 2.  **Memory RAG:** When detecting an anomaly, run `scripts/search_memory.py` to see if it's a known issue before escalating.
+3.  **Cost Monitoring:** Weekly, run `scripts/check_cost_anomaly.py` to detect spending spikes. Alert if threshold exceeded.
 
 ---
 *Maintained by @Master-Architect*

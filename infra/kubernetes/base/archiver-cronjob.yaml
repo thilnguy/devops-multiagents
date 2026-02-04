@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: memory-archiver
+  namespace: devops-multiagents
+  labels:
+    app: memory-archiver
+    component: agent-ecosystem
+spec:
+  schedule: "0 3 * * *"  # Run daily at 3 AM UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: archiver
+            image: python:3.11-slim
+            command:
+            - python3
+            - /scripts/archive_memory.py
+            volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+            - name: state
+              mountPath: /.antigravity/state
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
+          restartPolicy: OnFailure
+          volumes:
+          - name: scripts
+            configMap:
+              name: agent-scripts
+          - name: state
+            persistentVolumeClaim:
+              claimName: agent-state-pvc
