@@ -72,7 +72,23 @@ kubectl apply -f infra/kubernetes/quotas/
     # Should show 'arm64'
     ```
 2.  **Check Spot Instances**: Verification via AWS Console or CLI.
-3.  **Check Quotas**:
-    ```bash
     kubectl describe quota -n ns-dev
     ```
+
+## 🛡️ Policy Validation (Guardrails)
+
+To avoid infrastructure regressions (e.g., someone accidentally deploying On-Demand in Dev), we have implemented a validation script.
+
+**How to run locally:**
+```bash
+# 1. Initialize and generate plan
+cd infra/terraform
+terraform init
+terraform plan -var-file="terraform.nonprod.tfvars" -out=tfplan
+
+# 2. Convert plan to JSON
+terraform show -json tfplan > tfplan.json
+
+# 3. Run Policy Validator
+python3 ../../tests/scripts/validate_infra_policies.py tfplan.json --env dev
+```

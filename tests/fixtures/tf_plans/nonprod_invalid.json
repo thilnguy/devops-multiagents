@@ -1,0 +1,38 @@
+{
+    "format_version": "1.0",
+    "resource_changes": [
+        {
+            "type": "aws_eks_node_group",
+            "name": "main",
+            "change": {
+                "actions": [
+                    "create"
+                ],
+                "after": {
+                    "capacity_type": "ON_DEMAND",
+                    "instance_types": [
+                        "t3.medium"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "aws_nat_gateway",
+            "name": "nat1",
+            "change": {
+                "actions": [
+                    "create"
+                ]
+            }
+        },
+        {
+            "type": "aws_nat_gateway",
+            "name": "nat2",
+            "change": {
+                "actions": [
+                    "create"
+                ]
+            }
+        }
+    ]
+}
