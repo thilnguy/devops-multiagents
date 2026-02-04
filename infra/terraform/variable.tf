@@ -88,8 +88,51 @@ variable "enable_flow_logs" {
   default     = false
 }
 
-variable "tags" {
-  description = "Additional tags for all resources"
-  type        = map(string)
   default     = {}
+}
+
+# -----------------------------------------------------------------------------
+# EKS Configuration
+# -----------------------------------------------------------------------------
+variable "eks_cluster_version" {
+  description = "Kubernetes version for EKS cluster"
+  type        = string
+  default     = "1.29"
+}
+
+variable "eks_node_group_instance_types" {
+  description = "Instance types for EKS managed node groups"
+  type        = list(string)
+  default     = ["t4g.medium"] # ARM64 by default for cost savings
+}
+
+variable "eks_node_group_capacity_type" {
+  description = "Capacity type for EKS managed node groups (ON_DEMAND or SPOT)"
+  type        = string
+  default     = "SPOT" # Default to Spot for maximum savings
+  
+  validation {
+    condition     = contains(["ON_DEMAND", "SPOT"], var.eks_node_group_capacity_type)
+    error_message = "Capacity type must be ON_DEMAND or SPOT."
+  }
+}
+
+variable "eks_node_group_scaling_config" {
+  description = "Scaling configuration for EKS managed node groups"
+  type        = object({
+    desired_size = number
+    max_size     = number
+    min_size     = number
+  })
+  default = {
+    desired_size = 2
+    max_size     = 3
+    min_size     = 1
+  }
+}
+
+variable "enable_cluster_creator_admin_permissions" {
+  description = "Indicates whether or not to add the cluster creator (the identity used by Terraform) as an administrator via Access Entry"
+  type        = bool
+  default     = true
 }
